@@ -6,11 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
+/**
+ * RequestURI 정보 로그로 남기기
+ */
 @Slf4j
 public class FirstFilter implements Filter {
+//    private final static Logger log = LoggerFactory.getLogger(FirstFilter.class);  // 롬복에서 만들어주는 slf4j Logger
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(jakarta.servlet.FilterConfig filterConfig) throws ServletException {
         log.info("FirstFilter init()");
     }
 
@@ -22,11 +26,12 @@ public class FirstFilter implements Filter {
         log.info("FirstFilter - requestURI: {}", requestURI);
 
         filterChain.doFilter(servletRequest, servletResponse);
+
+        log.info("FirstFilter response");
     }
 
     @Override
     public void destroy() {
         log.info("FirstFilter destroy()");
-
     }
 }
