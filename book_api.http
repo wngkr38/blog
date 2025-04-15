@@ -1,0 +1,14 @@
+### GET request to example server
+GET http://localhost:8080/books
+
+###
+GET http://localhost:8080/books/1
+
+###
+POST http://localhost:8080/books
+Content-Type: application/json
+
+{
+  "name" : "test1",
+  "author": "test1"
+}
