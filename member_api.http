@@ -6,15 +6,18 @@ POST localhost:8080/members
 Content-Type: application/json
 
 {
-  "name": "이름"
+  "name": "이름",
+  "team": {
+    "id": 1,
+    "name": "FC바르셀로나"
+  }
 }
 
-###
-GET localhost:8080/members/1
-Content-Type: application/json
+### 회원 단건 조회
+GET http://localhost:8080/members/10
 
-###
-DELETE localhost:8080/members/1
+### 회원 단건 삭제
+DELETE localhost:8080/members/11
 
-###
-GET localhost:8080/search/members?name=이
+### 회원 이름으로 조회
+GET localhost:8080/search/members?name=동

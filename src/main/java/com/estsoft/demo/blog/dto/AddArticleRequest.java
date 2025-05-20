@@ -12,11 +12,13 @@ public class AddArticleRequest {
     private String title;
     private String content;
 
-    //AddArticleRequest -> Article (Entity)
-    public Article toEntity(){
+    // AddArticleRequest -> Article (Entity)
+    public Article toEntity() {
         return Article.builder()
                 .title(title)
                 .content(content)
                 .build();
+        // return new Article(title, content);
     }
+
 }

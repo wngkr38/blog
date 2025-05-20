@@ -15,19 +15,22 @@ public class BookService {
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
+
     // 책 목록 전체 조회
-    public List<Book> BookList() {
-        return bookRepository.findAll();
+    public List<Book> getBookList() {
+        return bookRepository.findAll();    // select * from book;
     }
+
     // 책 정보 저장
     public Book saveBook(AddBookRequest request) {
         Book book = request.toEntity();
         return bookRepository.save(book);
     }
-    // 책 정보 단건 조회
-    public Book getBook(String id) {
-        return bookRepository.findById(id).orElseThrow(() -> new NoSuchElementException("no exists id: " + id));
-    }
 
+    // 책 정보 단건 조회 (id 기준으로 조회)
+    public Book getBook(String id) {
+        return bookRepository.findById(id).orElseThrow(() ->
+                new NoSuchElementException("no exists id: " + id));
+    }
 
 }

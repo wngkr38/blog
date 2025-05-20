@@ -13,8 +13,8 @@ public class PageController {
     public String thymeleafPage(Model model) {
         Person person = new Person();
         person.setId(1L);
-        person.setName("길동");
-        person.setAge(30);
+        person.setName("길동홍");
+        person.setAge(40);
         person.setHobbies(Arrays.asList("여행", "조깅"));
 
         model.addAttribute("person", person);

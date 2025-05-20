@@ -11,7 +11,7 @@ public class AddBookRequest {
     private String name;
     private String author;
 
-    public Book toEntity(){
+    public Book toEntity() {
         return new Book(id, name, author);
     }
 }

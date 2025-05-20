@@ -13,25 +13,26 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    // getMemberAll 모든 정보를 조회
-    public List<Member> getMemberAll(){
+    public List<Member> getMemberAll() {
         return memberRepository.findAll();
     }
-    //member 테이블에 insert 쿼리
-    public Member insertMember(Member member){
-        Member savedMember = memberRepository.save(member);
-        return savedMember;
+
+    // member 테이블에 insert 쿼리
+    public Member insertMember(Member member) {
+        Member savedMemeber = memberRepository.save(member);
+        return savedMemeber;
     }
-    public Optional<Member> findById(Long id) {
-        return memberRepository.findById(id);
+
+    public Member selectMemberById(Long id) {
+        Optional<Member> optMember = memberRepository.findById(id);
+        return optMember.orElseGet(Member::new); //optMember.orElse(new Member()) -> 안티패턴!!
     }
-    public void deleteMemberById(Long id){
+
+    public void deleteMemberById(Long id) {
         memberRepository.deleteById(id);
     }
 
-
     public List<Member> selectMemberByName(String name) {
         return memberRepository.findByNameContaining(name);
-
     }
 }

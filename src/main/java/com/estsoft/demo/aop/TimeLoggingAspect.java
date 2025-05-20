@@ -11,17 +11,19 @@ import org.springframework.stereotype.Component;
 @Component
 @Aspect
 public class TimeLoggingAspect {
+    /* Pointcut */
     @Pointcut("execution(* com.estsoft.demo.blog.service..*(..))")
     public void pointcut() {}
 
+    /* Advice */
     @Around("pointcut()")
     public Object around(ProceedingJoinPoint joinPoint) {
         long startTimeMs = System.currentTimeMillis();
-        try{
+        try {
             return joinPoint.proceed();
-        }catch (Throwable e){
-            throw new RuntimeException(e);
-        }finally {
+        } catch (Throwable throwable) {
+            throw new RuntimeException(throwable);
+        } finally {
             long endTimeMs = System.currentTimeMillis();
             log.info("메소드 실행 시간: {}ms", endTimeMs - startTimeMs);
         }

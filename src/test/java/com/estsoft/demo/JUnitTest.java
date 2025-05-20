@@ -1,6 +1,6 @@
 package com.estsoft.demo;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class JUnitTest {
@@ -10,7 +10,6 @@ public class JUnitTest {
         int b = 2;
         int result = 3;
 
-        Assertions.assertEquals(result, a + b);
-
+        assertEquals(result, a + b);
     }
 }

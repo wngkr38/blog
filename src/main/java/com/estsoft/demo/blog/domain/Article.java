@@ -10,6 +10,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -18,7 +20,7 @@ import java.time.LocalDateTime;
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false)
+    @Column(updatable = false)
     private Long id;
 
     @Column(nullable = false)
@@ -33,36 +35,51 @@ public class Article {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "article")
+    private List<Comment> commentList = new ArrayList<>();
+
     @Builder
     public Article(String title, String content) {
         this.title = title;
         this.content = content;
     }
 
-    // title, content = ? commit; => update
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
     }
 
     public ArticleResponse toDto() {
-        return new ArticleResponse(id, title, content);
+        return new ArticleResponse(this);
     }
+
+    // 빌더 패턴
+    // Article.Builder
+    // .title(title).content(content).build();
+    // => new Article(title, content);
+
+//    public Article(Builder builder) {
+//        this.title = builder.title;
+//        this.content = builder.content;
+//    }
 //
-//    private static class Builder{
+//    public static class Builder {
 //        private String title;
 //        private String content;
 //
-//        Builder title(String title){
+//        Builder title(String title) {
 //            this.title = title;
 //            return this;
 //        }
-//        Builder content(String content){
+//
+//        Builder content(String content) {
 //            this.content = content;
 //            return this;
 //        }
-//        Article build(){
+//
+//        Article build() {
 //            return new Article(this);
 //        }
 //    }
+
 }

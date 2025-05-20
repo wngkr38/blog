@@ -13,20 +13,47 @@ GET http://localhost:8080/api/articles
 
 
 ### 블로그 게시글 단건 조회
-GET http://localhost:8080/api/articles/3
+GET http://localhost:8080/api/articles/2
 
 
 ### DELETE 블로그 게시글 단건 삭제
 DELETE http://localhost:8080/api/articles/1
 
-### DELETE 블로그 게시글 전체 삭제
-DELETE http://localhost:8080/api/articles
 
 ### PUT 블로그 게시글 수정
-PUT http://localhost:8080/api/articles/30
+PUT http://localhost:8080/api/articles/9
 Content-Type: application/json
 
 {
-  "title": "제목수정",
-  "content": "내용수정"
+  "title": "제목9999999",
+  "content": "내용9999999"
 }
+
+
+### POST 블로그 댓글 정보 생성
+POST http://localhost:8080/api/articles/1/comments
+Content-Type: application/json
+
+{
+  "body": "댓글 내용4444"
+}
+
+
+### GET 블로그 댓글 정보 조회
+GET http://localhost:8080/api/comments/1
+
+
+### PUT 블로그 댓글 정보 수정
+PUT http://localhost:8080/api/comments/1
+Content-Type: application/json
+
+{
+  "body": "수정된 댓글"
+}
+
+### DELETE 블로그 댓글 정보 삭제
+DELETE http://localhost:8080/api/comments/1
+
+
+### GET 게시글과 댓글 정보 한번에 조회
+GET http://localhost:8080/api/articles/1/comments

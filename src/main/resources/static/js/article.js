@@ -1,45 +1,45 @@
-const deleteButton = document.getElementById('delete-btn');
+const deleteButton = document.getElementById("delete-btn");
 
-if(deleteButton) {
+if (deleteButton) {
     deleteButton.addEventListener('click', ev => {
         // article-id
         let id = document.getElementById("article-id").value;
-        // DELETE /api/articles/{id}
-        fetch(`/api/articles/${id}`,{
+        console.log('id: ' + id);
+        fetch(`/api/articles/${id}`, {
             method: 'DELETE'
         }).then(() => {
-            alert('삭제가 완료되었습니다.')
-            location.replace('/articles')
-        });
-    });
+            alert("삭제가 완료되었습니다.");
+            location.replace('/articles');
+        })
+    })
 }
 
 const modifyButton = document.getElementById("modify-btn");
-
-if(modifyButton){
-    modifyButton.addEventListener('click', ev => {
+if (modifyButton) {
+    modifyButton.addEventListener('click', event => {
         let params = new URLSearchParams(location.search);
-        let id = params.get('id');
+        let id = params.get("id");
 
         fetch(`/api/articles/${id}`, {
-            method : 'PUT',
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 title: document.getElementById("title").value,
                 content: document.getElementById("content").value
             })
-        }).then(()=> {
+        }).then(() => {
             alert("수정이 완료되었습니다.");
             location.replace(`/articles/${id}`);
         })
-    });
+    })
 }
+
 const createButton = document.getElementById("create-btn");
-if(createButton){
-    createButton.addEventListener('click',ev => {
-        //POST /api/articles 글 생성 API 호출
+if (createButton) {
+    createButton.addEventListener('click', event => {
+        // POST /api/articles 글 생성 API 호출
         fetch('/api/articles', {
             method: 'POST',
             headers: {
@@ -50,7 +50,7 @@ if(createButton){
                 content: document.getElementById("content").value
             })
         }).then(() => {
-            alert("글 생성 완료");
+            alert("글 생성 완료!");
             location.replace('/articles');
         })
     })

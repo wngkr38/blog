@@ -4,11 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class UpdateArticleRequest {
     private String title;
     private String content;
-
 }

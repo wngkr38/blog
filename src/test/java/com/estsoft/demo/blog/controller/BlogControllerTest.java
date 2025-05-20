@@ -2,10 +2,11 @@ package com.estsoft.demo.blog.controller;
 
 import com.estsoft.demo.blog.domain.Article;
 import com.estsoft.demo.blog.dto.AddArticleRequest;
+import com.estsoft.demo.blog.dto.UpdateArticleRequest;
 import com.estsoft.demo.blog.repository.BlogRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,6 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,8 +52,8 @@ class BlogControllerTest {
 
         // when:  POST /api/articles (API 요청)
         ResultActions resultActions = mockMvc.perform(post("/api/articles")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody));
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody));
 
         // then:
         resultActions.andExpect(status().isCreated())
@@ -93,11 +95,10 @@ class BlogControllerTest {
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.title").value(article.getTitle()))
                 .andExpect(jsonPath("$.content").value(article.getContent()));
-
     }
 
     @Test
-    public void deleteArticle() throws Exception{
+    public void deleteArticle() throws Exception {
         // given: article 저장, getId
         Article article = blogRepository.save(new Article("제목123", "내용1234"));
         Long id = article.getId();
@@ -108,23 +109,49 @@ class BlogControllerTest {
         // then: status code 200 ok 검증, article 전체 조회시 빈 리스트 검증
         resultActions.andExpect(status().isOk());
 
-        List<Article> list =  blogRepository.findAll();
-        Assertions.assertThat(list).isEmpty();
+        List<Article> list = blogRepository.findAll();
+        assertThat(list).isEmpty();
     }
 
     @Test
-    public void deleteAllArticle() throws Exception {
-        //given: article , article2 저장 getId
-        Article article = blogRepository.save(new Article("제목1","내용1"));
-        Article article2 = blogRepository.save(new Article("제목2","내용2"));
-        Long id = article.getId();
-        Long id2 = article2.getId();
-        // when: DELETE API 호출
-        ResultActions resultActions = mockMvc.perform(delete("/api/articles"));
-        // then: status code 200 ok 검증, article 전체 조회시 빈 리스트 검증
-        resultActions.andExpect(status().isOk());
-        List<Article> list =  blogRepository.findAll();
-        Assertions.assertThat(list).isEmpty();
+    public void updateArticle() throws Exception {
+        // given: 게시글 추가, id추출, 수정할 값 셋팅 (json)
+        Article saved = blogRepository.save(new Article("dummy title", "dummy content"));
+        Long id = saved.getId();
+        UpdateArticleRequest request = new UpdateArticleRequest("update title", "update content");
+
+        // request(object) -> json  직렬화
+        String requestBody = objectMapper.writeValueAsString(request);
+
+        // when: 게시글 수정 API 호출
+        ResultActions resultActions = mockMvc.perform(put("/api/articles/{id}", id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // then: status code 검증, 값 검증 (responseBody값 = given절 값)
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value(request.getTitle()))
+                .andExpect(jsonPath("$.content").value(request.getContent()));
+
+        Article article = blogRepository.findById(id).orElseThrow();
+        assertThat(article.getTitle()).isEqualTo(request.getTitle());
+        assertThat(article.getContent()).isEqualTo(request.getContent());
     }
 
+    @DisplayName("Exception 발생시 400 Status Code 검증하는 테스트 코드")
+    @Test
+    public void updateArticleFailed() throws Exception {
+        // given: 존재하지 않는 ID 임의로 세팅
+        Long noExistsId = 1000L;
+        UpdateArticleRequest request = new UpdateArticleRequest("수정할title", "수정할content");
+        String requestBody = objectMapper.writeValueAsString(request);
+
+        // when: 게시글 수정API 호출
+        ResultActions resultActions = mockMvc.perform(put("/api/articles/{id}", noExistsId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
+
+        // then:
+        resultActions.andExpect(status().isBadRequest());
+    }
 }

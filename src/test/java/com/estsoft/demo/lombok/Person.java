@@ -6,8 +6,8 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 public class Person {
     private Long id;

@@ -25,33 +25,31 @@ public class BlogPageController {
         List<ArticleViewResponse> articleList = blogService.findArticles()
                 .stream().map(ArticleViewResponse::new)
                 .toList();
+
         model.addAttribute("articles", articleList);
-        return "articleList";
+        return "articleList";   // html 페이지
     }
 
-    // /articles/{id}
+    // /articles/{id} -> article.html
     @GetMapping("/articles/{id}")
-    public String getArticle(@PathVariable("id") Long id, Model model){
-        //게시글 단건 조회
+    public String getArticle(@PathVariable("id") Long id, Model model) {
         Article article = blogService.findArticle(id);
 
         model.addAttribute("article", new ArticleViewResponse(article));
 
         return "article";
     }
-    // /new-article -> newArtcile.html
+
+    // /new-article or /new-article?id=id -> newArticle.html (생성/수정 화면 연결)
     @GetMapping("/new-article")
-    public String showBlogEdit(@RequestParam(required = false) Long id ,Model model){
-        if(id == null){
-            // 생성
+    public String showBlogEditPage(@RequestParam(required = false) Long id, Model model) {
+        if (id == null) {
             model.addAttribute("article", new ArticleViewResponse());
-        } else{
-            // 수정
-            Article article =blogService.findArticle(id);
+        } else {
+            Article article = blogService.findArticle(id);
             model.addAttribute("article", new ArticleViewResponse(article));
         }
         return "newArticle";
-
     }
 
 }

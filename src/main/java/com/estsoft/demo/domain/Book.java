@@ -1,15 +1,19 @@
 package com.estsoft.demo.domain;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 public class Book {
     @Id
-    @Column(updatable = false,nullable = false,unique = true)
+    @Column(updatable = false, nullable = false, unique = true)
     private String id;
 
     @Column(nullable = false)
@@ -17,5 +21,4 @@ public class Book {
 
     @Column(nullable = false)
     private String author;
-
 }

@@ -7,11 +7,12 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PersonTest {
+
     @Test
     public void testLombok() {
         Person person = new Person();
         person.setId(1L);
-        person.setName("lee");
+        person.setName("name1");
         person.setAge(20);
         person.setHobbies(Arrays.asList("조깅", "줄넘기"));
 
@@ -20,4 +21,5 @@ class PersonTest {
         System.out.println(person.getAge());
         System.out.println(person.getHobbies());
     }
+
 }

@@ -1,33 +1,28 @@
 package com.estsoft.jdbc;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class DeleteJdbcExample {
-    private static final String url = "jdbc:mysql://localhost:3306/test_db";
-    private static final String username = "root";
-    private static final String password = "jiuh2113";
+    private final static String SQL = "DELETE FROM students WHERE id = ?";
+    private final static String DB_URL = "jdbc:mysql://localhost:3306/test_db";
+    private final static String username = "root";
+    private final static String password = "0000";
 
     public static void main(String[] args) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, username, password);
+             PreparedStatement ps = conn.prepareStatement(SQL)) {
 
+            int id = 3;
+            ps.setInt(1, id);
 
-        try (
-                Connection conn = DriverManager.getConnection(url, username, password);
-                Statement statement = conn.createStatement();
-        ) {
-            int deleteRow = statement.executeUpdate("DELETE FROM students WHERE id = 1 ");
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM students");
-            System.out.println("delete" + deleteRow);
-            while (resultSet.next()) {
-                System.out.println("id: " + resultSet.getInt("id"));
-                System.out.println("name: " + resultSet.getString("name"));
-                System.out.println("age: " + resultSet.getInt("age"));
-                System.out.println("address: " + resultSet.getString("address"));
-            }
-
-        } catch (
-                SQLException e) {
-            System.out.println("SQL Exception: " + e.getMessage());
+            int rowNum = ps.executeUpdate();
+            // 3. 실행 결과 출력
+            System.out.println("rowNum = " + rowNum);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 }
-

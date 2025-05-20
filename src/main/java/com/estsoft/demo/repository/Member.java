@@ -1,11 +1,9 @@
 package com.estsoft.demo.repository;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 
 @Getter
 @Entity
@@ -20,8 +18,12 @@ public class Member {
     @Column
     private String name;
 
-    //team_id
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
+
+    public Member(String name, Team team) {
+        this.name = name;
+        this.team = team;
+    }
 }

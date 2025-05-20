@@ -1,13 +1,13 @@
 package com.estsoft.demo.controller;
 
-import com.estsoft.demo.service.MemberService;
+import com.estsoft.demo.dto.MemberRequest;
 import com.estsoft.demo.repository.Member;
+import com.estsoft.demo.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
@@ -16,37 +16,48 @@ public class MemberController {
 
     @ResponseBody
     @GetMapping("/members")
-    public List<Member> showMembers(){
-        return memberService.getMemberAll();
+    public List<MemberDTO> showMembers() {
+        List<Member> memberAll = memberService.getMemberAll();
+        return memberAll.stream()
+                .map(MemberDTO::new)
+                .toList();
     }
 
     @ResponseBody
-    @PostMapping("/members")
-    public Member saveMember(@RequestBody Member member){
-        return memberService.insertMember(member);
-    }
-    @ResponseBody
-    @GetMapping("members/{id}")
-    public Optional<Member> getMemberById(@PathVariable Long id) {
-        return memberService.findById(id);
+    @PostMapping("/members")            // POST /members 회원정보 저장 API
+    public MemberDTO saveMember(@RequestBody MemberRequest member) {
+        Member savedMember = memberService.insertMember(member.toEntity());
+        return new MemberDTO(savedMember);
     }
 
+    // GET /members/{id} -> member 단건 조회
+    @ResponseBody
+    @GetMapping("/members/{id}")
+    public MemberDTO selectMemberById(@PathVariable Long id) {
+        Member member = memberService.selectMemberById(id);
+        return new MemberDTO(member);
+    }
+
+
+    // DELETE /members/{id}  -> member 단건 삭제
     @ResponseBody
     @DeleteMapping("/members/{id}")
-    public String deleteMemberById(@PathVariable Long id){
+    public String deleteMemberById(@PathVariable Long id) {
         memberService.deleteMemberById(id);
-        return "삭제 성공";
+        return "OK";
     }
 
-    //GET search/members?name=
-    @GetMapping("search/members")
+    // GET /search/members?name=---
+    @GetMapping("/search/members")
     @ResponseBody
-    public List<Member> selectMemberByName(@RequestParam("name") String name){
+    public List<Member> selectMemberByName(@RequestParam("name") String name) {
         return memberService.selectMemberByName(name);
     }
 
+
     @GetMapping("/hi")
     public String htmlPage() {
-        return "hi";
+        return "hi";        // hi.html
     }
+
 }

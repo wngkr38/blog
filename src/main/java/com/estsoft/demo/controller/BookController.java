@@ -19,30 +19,30 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    // 전체 책 목록 조회
     @GetMapping("/books")
-    public String showAllBooks(Model model) {
-        List<BookViewResponse> bookList = bookService.BookList()
+    public String showBooks(Model model) {
+        List<BookViewResponse> bookList = bookService.getBookList()
                 .stream()
                 .map(BookViewResponse::new)
                 .toList();
-        model.addAttribute("bookList", bookList);
-        return "bookManager";
-    }
-    // ID로 책 조회
-    @RequestMapping(method = RequestMethod.GET, value = "/books/{id}")
-    public String showBookDetail(@PathVariable("id") String id , Model model) {
 
+        model.addAttribute("bookList", bookList);
+        return "bookManage";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/books/{id}")
+    public String showBookDetail(@PathVariable("id") String id,
+                                 Model model) {
         Book book = bookService.getBook(id);
 
-        model.addAttribute("book",new BookViewResponse(book));
+        model.addAttribute("book", new BookViewResponse(book));
         return "bookDetail";
     }
 
-    // 책 추가
-    @RequestMapping(method = RequestMethod.POST, value="/books")
+    @RequestMapping(method = RequestMethod.POST, value = "/books")
     public String addBook(@ModelAttribute AddBookRequest request) {
         bookService.saveBook(request);
         return "redirect:/books";
     }
+
 }

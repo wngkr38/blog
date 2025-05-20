@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class UserViewController {
 
     @GetMapping("/login")
-    public String loginView(){
+    public String loginView() {
         return "login";
     }
 
     @GetMapping("/signup")
-    public String signUpView(){
+    public String signupView() {
         return "signup";
     }
 }
